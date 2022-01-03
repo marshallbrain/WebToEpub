@@ -14,7 +14,7 @@ class ChapterUrlsUI {
         document.getElementById("editChaptersUrlsButton").onclick = this.setEditInputMode.bind(this);
         document.getElementById("copyUrlsToClipboardButton").onclick = this.copyUrlsToClipboard.bind(this);
         document.getElementById("showChapterUrlsCheckbox").onclick = this.toggleShowUrlsForChapterRanges.bind(this);
-        ChapterUrlsUI.modifyApplyChangesButtons(button => button.onclick = this.setTableMode.bind(this));
+        ChapterUrlsUI.getApplyChangesButton().onclick = this.setTableMode.bind(this);
         ChapterUrlsUI.getChapterUrlsTable().onmousedown = ChapterUrlsUI.onMouseDown;
     }
 
@@ -29,7 +29,7 @@ class ChapterUrlsUI {
         chapters.forEach(function (chapter) {
             let row = document.createElement("tr");
             ChapterUrlsUI.appendCheckBoxToRow(row, chapter);
-            ChapterUrlsUI.appendInputTextToRow(row, chapter);
+            ChapterUrlsUI.appendInputTextToRow(row, chapter, index);
             chapter.row = row;
             ChapterUrlsUI.appendColumnDataToRow(row, chapter.sourceUrl);
             linksTable.appendChild(row);
@@ -83,7 +83,7 @@ class ChapterUrlsUI {
             .filter(c => c.checked)
             .map(c => c.parentElement.parentElement);
         if (max< selectedRows.length ) {
-            let message = chrome.i18n.getMessage("__MSG_More_than_max_chapters_selected__", 
+            let message = chrome.i18n.getMessage("__MSG_More_than_max_chapters_selected__",
                 [selectedRows.length, max]);
             if (confirm(message) === false) {
                 for(let row of selectedRows.slice(max)) {
@@ -138,7 +138,7 @@ class ChapterUrlsUI {
         document.getElementById("spanChapterCount").textContent = count;
     }
     
-    /** 
+    /**
     * @private
     */
     static getChapterUrlsTable() {
@@ -162,15 +162,14 @@ class ChapterUrlsUI {
             : "title";
     }
 
-    /** 
+    /**
     * @private
     */
-    static modifyApplyChangesButtons(mutator) {
-        mutator(document.getElementById("applyChangesButton"));
-        mutator(document.getElementById("applyChangesButton2"));
+    static getApplyChangesButton() {
+        return document.getElementById("applyChangesButton");
     }
 
-    /** 
+    /**
     * @private
     */
     static getEditChaptersUrlsInput() {
@@ -206,7 +205,7 @@ class ChapterUrlsUI {
             .filter(r => r.querySelector("th") === null);
     }
 
-    /** 
+    /**
     * @private
     */
     static appendCheckBoxToRow(row, chapter) {
@@ -230,14 +229,14 @@ class ChapterUrlsUI {
         col.appendChild(img);
     }
 
-    /** 
+    /**
     * @private
     */
-    static appendInputTextToRow(row, chapter) {
+    static appendInputTextToRow(row, chapter, index) {
         let col = document.createElement("td");
         let input = document.createElement("input");
         input.type = "text";
-        input.value = chapter.title;
+        input.value = "(" + index + ") " + chapter.title;
         input.className = "fullWidth";
         input.addEventListener("blur", function() { chapter.title = input.value; },  true);
         col.appendChild(input);
@@ -254,11 +253,11 @@ class ChapterUrlsUI {
         let inputs = [...linksTable.querySelectorAll("input[type='text']")];
         let width = inputs.reduce((acc, element) => Math.max(acc, element.value.length), 0);
         if (0 < width) {
-            inputs.forEach(i => i.size = width); 
+            inputs.forEach(i => i.size = width);
         }
     }
 
-    /** 
+    /**
     * @private
     */
     static appendColumnDataToRow(row, textData) {
@@ -269,7 +268,7 @@ class ChapterUrlsUI {
         return col;
     }
 
-    /** 
+    /**
     * @public
     */
     static setVisibileUI(toTable) {
@@ -279,10 +278,10 @@ class ChapterUrlsUI {
         document.getElementById("inputSection").hidden = !toTable;
         document.getElementById("coverUrlSection").hidden = !toTable;
         document.getElementById("chapterSelectControlsDiv").hidden = !toTable;
-        ChapterUrlsUI.modifyApplyChangesButtons(button => button.hidden = toTable);
+        ChapterUrlsUI.getApplyChangesButton().hidden = toTable;
     }
 
-    /** 
+    /**
     * @private
     */
     setTableMode() {
@@ -309,7 +308,7 @@ class ChapterUrlsUI {
         }
     }
 
-    /** 
+    /**
     * @private
     */
     htmlToChapters(innerHtml) {
@@ -352,7 +351,7 @@ class ChapterUrlsUI {
         select.onchange = ChapterUrlsUI.onRangeChanged;
     }
 
-    /** 
+    /**
     * @private
     */
     setEditInputMode() {
@@ -437,12 +436,11 @@ class ChapterUrlsUI {
 ChapterUrlsUI.DOWNLOAD_STATE_NONE = 0;
 ChapterUrlsUI.DOWNLOAD_STATE_DOWNLOADING = 1;
 ChapterUrlsUI.DOWNLOAD_STATE_LOADED = 2;
-ChapterUrlsUI.DOWNLOAD_STATE_SLEEPING = 3;
+
 ChapterUrlsUI.ImageForState = [
     "images/ChapterStateNone.svg",
     "images/ChapterStateDownloading.svg",
-    "images/ChapterStateLoaded.svg",
-    "images/ChapterStateSleeping.svg"
+    "images/ChapterStateLoaded.svg"
 ];
 
 ChapterUrlsUI.lastSelectedRow = null;

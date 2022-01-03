@@ -306,6 +306,11 @@ class Parser {
     }
 
     webPagesToEpubItems(webPages) {
+        
+        webPages.forEach(page => {
+            page.title = page.title.match("^(?:\\(\\d+\\)\\s*)?(.+)")[1] // removes the (index) from the start of the title
+        })
+        
         let epubItems = [];
         let index = 0;
 
