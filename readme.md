@@ -110,6 +110,12 @@ The easiest set of steps is using Firefox.
 2. Build extension. See "To run Eslint (and build the plugin)" in "Other notes" below.
 3. Install extension in browser of choice, using instructions above.
 
+## Alternative way of installing from source
+(Enables live editing without needing to build it after every change)
+1. Clone this repo.
+2. Make sure "Developer Mode" at the top of the page is checked.
+3. Press the "Load unpacked" button and browse to the plugin folder within the repo.
+
 ## License information
 Licenced under GPLv3.
 
