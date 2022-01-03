@@ -21,7 +21,7 @@ class FetchCache {
     }
 
     inCache(url) {
-        return (((new URL(url).pathname) === this.path) 
+        return (((new URL(url).pathname) === this.path)
         && (this.dom !== null));
     }
 }
@@ -105,7 +105,7 @@ class Parser {
     }
 
     addTitleToContent(webPage, content) {
-        let title = this.findChapterTitle(webPage.rawDom);
+        let title = webPage.title
         if (title != null) {
             if (title instanceof HTMLElement) {
                 title = title.textContent;
@@ -193,7 +193,7 @@ class Parser {
 
     makePlacehoderEpubItem(webPage, epubItemIndex) {
         let temp = Parser.makeEmptyDocForContent(webPage.sourceUrl);
-        temp.content.textContent = chrome.i18n.getMessage("chapterPlaceholderMessage", 
+        temp.content.textContent = chrome.i18n.getMessage("chapterPlaceholderMessage",
             [webPage.sourceUrl, webPage.error]
         );
         util.convertPreTagToPTags(temp.dom, temp.content);
@@ -231,7 +231,7 @@ class Parser {
     }
 
     /**
-    * default implementation, 
+    * default implementation,
     * if not available, default to English
     */
     extractLanguage(dom) {
@@ -247,7 +247,7 @@ class Parser {
     }
 
     /**
-    * default implementation, 
+    * default implementation,
     * if not available, return ''
     */
     extractSubject(dom) {   // eslint-disable-line no-unused-vars
@@ -344,7 +344,7 @@ class Parser {
         urlElement.appendChild(document.createTextNode(this.state.chapterListUrl));
         div.appendChild(urlElement);
         let infoDiv = document.createElement("div");
-        this.populateInfoDiv(infoDiv, dom);    
+        this.populateInfoDiv(infoDiv, dom);
         let childNodes = [div, infoDiv];
         let chapter = {
             sourceUrl: this.state.chapterListUrl,
@@ -394,6 +394,7 @@ class Parser {
                 }
                 ProgressBar.setValue(0);
             }
+            
             that.state.setPagesToFetch(chapters);
             chapterUrlsUI.connectButtonHandlers();
         }).catch(function (err) {
@@ -513,7 +514,7 @@ class Parser {
                 webPage.isIncludeable = false;
                 throw error;
             }
-        }); 
+        });
     }
 
     fetchImagesUsedInDocument(content, webPage) {
@@ -562,7 +563,7 @@ class Parser {
 
     // Hook point, when need to do something when "Pack EPUB" pressed
     onStartCollecting() {
-    }    
+    }
 
     fixupHyperlinksInEpubItems(epubItems) {
         let targets = this.sourceUrlToEpubItemUrl(epubItems);
@@ -618,7 +619,7 @@ class Parser {
     }
 
     /**
-     * limit number of pages to fetch at once 
+     * limit number of pages to fetch at once
      * ignoing user preference.
      * Some sites can't handle high load.  e.g. Comrademao
      * @param {any} fetchSize
@@ -630,14 +631,14 @@ class Parser {
     static makeEmptyDocForContent(baseUrl) {
         let dom = document.implementation.createHTMLDocument("");
         if (baseUrl != null) {
-            util.setBaseTag(baseUrl, dom);        
+            util.setBaseTag(baseUrl, dom);
         }
         let content = dom.createElement("div");
         content.className = Parser.WEB_TO_EPUB_CLASS_NAME;
         dom.body.appendChild(content);
         return {
             dom: dom,
-            content: content 
+            content: content
         };
     }
 
@@ -652,7 +653,7 @@ class Parser {
     }
 
     async rateLimitDelay() {
-        let manualDelayPerChapterValue = (this.userPreferences.manualDelayPerChapter.value == "simulate_reading" )? util.randomInteger(420000,900000): parseInt(this.userPreferences.manualDelayPerChapter.value);  
+        let manualDelayPerChapterValue = (this.userPreferences.manualDelayPerChapter.value == "simulate_reading" )? util.randomInteger(420000,900000): parseInt(this.userPreferences.manualDelayPerChapter.value);
         await util.sleep(manualDelayPerChapterValue);
     }
 
