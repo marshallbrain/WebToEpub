@@ -3,6 +3,17 @@
 */
 "use strict";
 
+function FormatChapterTitles(title, index) {
+    title = title.replace(new RegExp("^\\d+\\."), "")
+
+    const exclude = ["Epilogue", "Interlude", "Chapter", "Bonus", "Mini Chapter", "Prologue"]
+    if (!exclude.some((value) => {return title.startsWith(value)})) {
+        title = `Chapter ${index}: ` + title
+        index += 1
+    }
+    return [title.trim(), index]
+}
+
 /**
  * For sites that have multiple chapters per web page, this can minimize HTTP calls
  */
@@ -385,6 +396,11 @@ class Parser {
                 chapters = that.addFirstPageUrlToWebPages(url, firstPageDom, chapters);
             }
             chapters = that.cleanWebPageUrls(chapters);
+    
+            for (let i = 0, index = 1; i < chapters.length; i++) {
+                [chapters[i].title, index] = FormatChapterTitles(chapters[i].title, index)
+            }
+            
             that.userPreferences.readingList.deselectOldChapters(url, chapters);
             chapterUrlsUI.populateChapterUrlsTable(chapters);
             if (0 < chapters.length) {
