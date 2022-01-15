@@ -931,7 +931,8 @@ var util = (function () {
             "li","main","nav","noscript","ol","output","p","pre",
             "section","table","tfoot","ul","video"],
 
-        HEADER_TAGS: ["h1", "h2", "h3", "h4", "h5", "h6" ],
+        // HEADER_TAGS: ["h1", "h2", "h3", "h4", "h5", "h6" ],
+        HEADER_TAGS: ["h2", "h3", "h4", "h5", "h6" ],
 
         sleep: sleep,
         randomInteger: randomInteger,

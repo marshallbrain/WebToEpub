@@ -57,13 +57,10 @@ class EpubMetaInfo {
         // Centered headings and some margin to make sure it's not too close to the content.
         "h1, h2 {\r"+
         "   text-align: center;\r"+
-        "   margin-bottom: 10%;\r"+
-        "   margin-top: 10%;\r"+
+        "   page-break-before: always;\r"+
         "}\r"+
         "h3, h4, h5, h6 {\r"+
         "   text-align: center;\r"+
-        "   margin-bottom: 15%;\r"+
-        "   margin-top: 10%;\r"+
         "}\r"+
 
         // Style for lists. Calibre sometimes has issues with the placement of lists, this fixes it.
@@ -111,7 +108,7 @@ class EpubMetaInfo {
         "   margin-top: 0;\r"+
         "}\r"+
 
-        // differentiate caption text from body text 
+        // differentiate caption text from body text
        ".thumbcaption {\r"+
        "  display: block;\r"+
        "  font-size: 0.9em;\r"+

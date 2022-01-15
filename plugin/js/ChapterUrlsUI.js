@@ -428,7 +428,7 @@ class ChapterUrlsUI {
         }
         ++ChapterUrlsUI.ConsecutiveRowClicks;
         if (ChapterUrlsUI.ConsecutiveRowClicks == 5) {
-            alert(chrome.i18n.getMessage("__MSG_Shift_Click__"));
+            // alert(chrome.i18n.getMessage("__MSG_Shift_Click__"));
         }
     }
 }
